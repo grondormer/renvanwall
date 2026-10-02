@@ -31,7 +31,7 @@ wallet_counter = 0
 counter_lock = threading.Lock()
 
 # Keep-alive status
-keep_alive_active = False  # Start disabled - use web interface to enable
+keep_alive_active = True  # Start enabled by default
 keep_alive_thread = None
 keep_alive_stop = threading.Event()
 
@@ -584,11 +584,16 @@ def index():
             </button>
             
             <script>
+                // Auto-refresh the page every 5 seconds to update stats
+                setInterval(function() {{
+                    location.reload();
+                }}, 5000);
+
                 function toggleKeepAlive() {{
                     const btn = document.getElementById('keepAliveBtn');
                     const isStarting = btn.textContent.trim() === 'Start Keep-Alive';
                     btn.disabled = true;
-                    
+
                     fetch(isStarting ? '/start-keepalive' : '/stop-keepalive', {{
                         method: 'POST',
                         headers: {{
@@ -680,6 +685,10 @@ if not GITHUB_TOKEN:
 # Start wallet generation in a background thread
 wallet_thread = threading.Thread(target=start_wallet_generation, daemon=True)
 wallet_thread.start()
+
+# Start keep-alive by default
+start_keep_alive()
+print("✅ Keep-alive started by default")
 
 print("✅ Wallet generation initialized and started")
 
