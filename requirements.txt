@@ -1,0 +1,9 @@
+solders>=0.18.0
+base58>=2.1.1
+python-dotenv
+PyGithub
+flask
+flask-cors
+gunicorn>=2.0.0
+tqdm>=4.65.0
+requests>=2.31.0
